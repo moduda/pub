@@ -1,0 +1,16 @@
+#! /bin/bash
+#
+# Front-end for gam.py
+#
+# 15.jan.2016	yoon@tentmakers.com
+#
+
+DDIR=`cd .; pwd`
+GAM=$DDIR/gam.py
+
+DOM=mz
+
+[ ! -f $OAUTHFILE ] && export OAUTHFILE=oauth2service-${DOM}.txt
+[ ! -f $CLIENTSECRETS ] && export CLIENTSECRETS=client_secrets-${DOM}.txt
+set -x
+python $GAM "$@"
