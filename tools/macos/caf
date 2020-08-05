@@ -1,0 +1,51 @@
+#! /bin/bash
+#
+# Wrapper for caffeinate command not sleep this mac
+#
+# 10.jan.2019	ykim
+#
+
+CMD=caffeinate
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+PROMPT="Wake for how long:
+1) 15 min
+2) 30 min
+3) 60 min
+4) others
+? "
+
+case $1 in
+[0-9]*|[0-9]*[hd])
+	ARG=$1
+	case $ARG in
+	*h)	DURATION=$(($(echo $ARG | sed -e "s/.\$//")*60)) ;;
+	*d)	DURATION=$(($(echo $ARG | sed -e "s/.\$//")*24*60)) ;;
+	*m)	DURATION=$(($(echo $ARG | sed -e "s/.\$//"))) ;;
+	*)	DURATION="${ARG}" ; ARG="${ARG}m" ;;
+	esac
+	;;
+*)
+	read -n 1 -p "$PROMPT" ARG
+	echo
+
+	DURATION=$(echo "$PROMPT" | awk '/^'"$ARG"'\)/ { print $2 }')
+	ARG=${DURATION}m
+	;;
+esac
+
+case $DURATION in
+[0-9]*)		;;
+*)			echo ; read -p "How many minutes? " DURATION ; ARG=${DURATION}m ;;
+esac
+
+DURATION=$(($DURATION * 60))
+
+echo -e "Staying ${GREEN}awake for ${ARG} ${unit}${NC} until ${YELLOW}$(date -v+${DURATION}S +'%r %D')${NC} ..."
+
+$CMD -dt $DURATION
+
+echo -e "${RED}Done${NC}"
