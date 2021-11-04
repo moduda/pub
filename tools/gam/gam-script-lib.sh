@@ -2,7 +2,7 @@
 #
 # Library for the scripts
 #
-# 15.jan.2016	yoon@tentmakers.com
+# 15.jan.2016	ykim
 #
 
 gen_usage () {

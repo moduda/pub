@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/zsh
 #
 # Check if the given user ID is an employee or not
 #
@@ -6,8 +6,9 @@
 # 1) Account Suspended: True
 # 2) Resource Not Found: userKey - notFound
 #
-# 12.feb.16	yoon.kim
+# 12.feb.16	ykim
 #
+. ~/.zshrc
 
 KEYSTR="Resource Not Found: userKey - notFound|Account Suspended:.*True"
 
@@ -20,7 +21,7 @@ fi
 
 for i in $LIST
 do
-	if [ $(./gam info user $i 2>&1 | egrep -c "$KEYSTR") -gt 0 ]
+	if [ $(gam info user $i 2>&1 | egrep -c "$KEYSTR") -gt 0 ]
 	then
 		echo "NOT EMP or Gapps User: $i"
 	fi
