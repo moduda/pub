@@ -10,7 +10,7 @@
 #
 . ~/.zshrc
 
-KEYSTR="Resource Not Found: userKey - notFound|Account Suspended:.*True"
+DOMAIN=firstup.io
 
 if [ -f $1 ]
 then
@@ -21,8 +21,15 @@ fi
 
 for i in $LIST
 do
-	if [ $(gam info user $i 2>&1 | egrep -c "$KEYSTR") -gt 0 ]
+	RESULT=$(gam whatis $i 2>&1)
+	if [ $(echo "$RESULT" | grep -c "is a user alias") -gt 0 ]
 	then
-		echo "NOT EMP or Gapps User: $i"
+		REAL_EMAIL=$(echo "$RESULT" | awk '/User Email:/ { print $NF }')
+		echo "$i is an alias to $REAL_EMAIL"
+	elif [ $(echo "$RESULT" | grep -c "doesn't seem to exist!") -gt 0 ]
+	then
+		echo "$i does not exist"
+	else
+		echo "$RESULT" | grep "$DOMAIN is "
 	fi
 done
