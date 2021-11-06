@@ -2,7 +2,7 @@
 #
 # Delete an existing group
 #
-# 15.jan.2016	yoon@tentmakers.com
+# 15.jan.2016	ykim
 #
 
 usage () {
@@ -24,10 +24,8 @@ case $reply in
 *)	echo "Aborting."; exit ;;
 esac
 
-set -x
 ./gam delete group $1
-set +x
 if [ $? != 0 ]
 then
-	echo "Failed to remove $1"
+	echo "Failed to delete group: $1"
 fi

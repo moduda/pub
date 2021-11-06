@@ -1,10 +1,9 @@
-#! /bin/zsh
+#! /bin/bash
 #
 # Output all groups and their members
 #
 # 15.jan.2016	ykim
 #
-. ~/.zshrc
 
 ALLG=$(gam print groups | egrep -v "^\+|Email")
 

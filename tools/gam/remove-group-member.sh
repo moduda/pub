@@ -2,7 +2,7 @@
 #
 # Remove member(s) from an existing group
 #
-# 15.jan.2016	yoon@tentmakers.com
+# 15.jan.2016	ykim
 #
 
 usage() {
@@ -20,14 +20,14 @@ if [ -f $2 ]
 then
 	for u in $(cat $2)
 	do
-		echo "++ ./gam $C update group $g remove $OM $u"
-		./gam $C update group $g remove $OM $u
+		echo "++ ./gam update group $g remove $OM $u"
+		./gam update group $g remove $OM $u
 	done
 else
 	shift
 	for m in $*
 	do
-		echo "++ ./gam $C update group $g remove $OM $m"
-		./gam $C update group $g remove $OM $m
+		echo "++ ./gam update group $g remove $OM $m"
+		./gam update group $g remove $OM $m
 	done
 fi

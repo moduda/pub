@@ -5,14 +5,8 @@
 # 15.jan.2016	ykim
 #
 
+DOMAIN="default.com"
+
 gen_usage () {
 	echo "Usage: $(basename $0) [dom1|dom2|dom3] $*"
-}
-
-get_env() {
-	case $1 in
-	"")	return 1 ;;
-	*)	C= ;;
-	esac
-	echo $C $*
 }

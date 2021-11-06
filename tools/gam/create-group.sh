@@ -2,14 +2,12 @@
 #
 # Create a brand new group with some attributes set by default
 #
-# 15.jan.2016	yoon@tentmakers.com
+# 15.jan.2016	ykim
 #
 
 usage () {
 	echo "Usage: $(basename $0) group-name"
 }
-
-DOM=mz
 
 case $1 in
 "")
@@ -59,6 +57,11 @@ then
 
 	echo "%% Enter members separated by spaces in a line -OR- filename with members: "
 	read newmembers
-	newmembers=$(echo $newmembers | sed -e "s/,/ /g")
+	if [ -f $newmembers ]
+	then
+		newmembers=$(cat $newmembers)
+	else
+		newmembers=$(echo $newmembers | sed -e "s/,/ /g")
+	fi
 	./add-group-member $GROUP $newmembers
 fi

@@ -1,4 +1,4 @@
-#! /bin/zsh
+#! /bin/bash
 #
 # Check if the given user ID is an employee or not
 #
@@ -8,9 +8,7 @@
 #
 # 12.feb.16	ykim
 #
-. ~/.zshrc
-
-DOMAIN=firstup.io
+. ./gam-script-lib.sh
 
 if [ -f $1 ]
 then

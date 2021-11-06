@@ -5,10 +5,6 @@
 # 15.jan.2016	ykim
 #
 
-gam () {
-	"$HOME/bin/gam/gam" "$@"
-}
-
 ALLG=$(gam print groups | egrep -v "^\+|Email")
 
 case $1 in

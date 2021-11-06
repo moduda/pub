@@ -2,8 +2,10 @@
 #
 # Expand groups members recursing down the sub-groups
 #
-# 15.jan.2016	yoon@machinezone.com
+# 15.jan.2016	ykim
 #
+
+. ./gam-script-lib.sh
 
 case $1 in
 ?|"")	echo "Usage: $(basename $0) group-name"; exit 1 ;;
@@ -11,7 +13,7 @@ esac
 
 GNAME=$1
 
-members=$(./gam.py info group $GNAME |
+members=$(gam info group $GNAME |
 	awk '/(manager|member|owner):/ {
 		if ($NF ~ /(user)/) {
 			userlist = sprintf("%s %s", userlist, $2)
@@ -21,7 +23,7 @@ members=$(./gam.py info group $GNAME |
 	}
 	END {
 		printf("ULIST=\"%s\"; GLIST=\"%s\"\n", userlist, grouplist)
-	}' | sed -e "s/@machinezone.com//g"
+	}' | sed -e "s/@$DOMAIN//g"
 )
 
 eval $members
