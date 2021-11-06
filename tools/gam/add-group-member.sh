@@ -2,15 +2,15 @@
 #
 # Add new member(s) to an existing group
 #
-# 15.jan.2016	yoon.kim
+# 15.jan.2016	ykim
 #
 
 usage() {
-	echo "Usage: $(basename $0) [owner|member] group-name user-name"
+	echo "Usage: $(basename $0) [owner|manager|member] group-name user-name"
 }
 
 case $1 in
-owner|member)	OM=$1; shift ;;
+owner|manager|member)	OM=$1; shift ;;
 *)		OM=member ;;
 esac
 
