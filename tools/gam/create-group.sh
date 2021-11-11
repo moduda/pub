@@ -5,6 +5,9 @@
 # 15.jan.2016	ykim
 #
 
+PWD=$(dirname $0)
+. $PWD/gam-script-lib.sh
+
 usage () {
 	echo "Usage: $(basename $0) group-name"
 }
@@ -28,7 +31,7 @@ case $reply in
 esac
 
 set -x
-./gam create group $GROUP name "$gname" description "$gdesc" $ext 2>/dev/null
+gam create group $GROUP name "$gname" description "$gdesc" $ext 2>/dev/null
 set +x
 if [ $? != 0 ]
 then
@@ -41,10 +44,10 @@ then
 	esac
 fi
 
-./gam update group $GROUP who_can_view_membership all_in_domain_can_view
+gam update group $GROUP who_can_view_membership all_in_domain_can_view
 
 echo "% Fetching group info for: $GROUP"
-./gam info group $GROUP
+gam info group $GROUP
 
 if [ $? = 0 ]
 then
@@ -57,11 +60,11 @@ then
 
 	echo "%% Enter members separated by spaces in a line -OR- filename with members: "
 	read newmembers
-	if [ -f $newmembers ]
+	if [ -f "$newmembers" ]
 	then
 		newmembers=$(cat $newmembers)
 	else
 		newmembers=$(echo $newmembers | sed -e "s/,/ /g")
 	fi
-	./add-group-member $GROUP $newmembers
+	./add-group-member.sh $GROUP $newmembers
 fi
