@@ -5,6 +5,9 @@
 # 15.jan.2016	ykim
 #
 
+PWD=$(dirname $0)
+. $PWD/gam-script-lib.sh
+
 usage () {
 	echo "Usage: $(basename $0) group-name"
 }
@@ -24,7 +27,7 @@ case $reply in
 *)	echo "Aborting."; exit ;;
 esac
 
-./gam delete group $1
+gam delete group $1
 if [ $? != 0 ]
 then
 	echo "Failed to delete group: $1"

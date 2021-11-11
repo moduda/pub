@@ -8,7 +8,9 @@
 #
 # 12.feb.16	ykim
 #
-. ./gam-script-lib.sh
+
+PWD=$(dirname $0)
+. $PWD/gam-script-lib.sh
 
 if [ -f $1 ]
 then

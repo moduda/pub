@@ -5,6 +5,9 @@
 # 15.jan.2016	ykim
 #
 
+PWD=$(dirname $0)
+. $PWD/gam-script-lib.sh
+
 ALLG=$(gam print groups | egrep -v "^\+|Email")
 
 case $1 in

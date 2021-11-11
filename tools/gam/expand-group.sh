@@ -5,7 +5,8 @@
 # 15.jan.2016	ykim
 #
 
-. ./gam-script-lib.sh
+PWD=$(dirname $0)
+. $PWD/gam-script-lib.sh
 
 case $1 in
 ?|"")	echo "Usage: $(basename $0) group-name"; exit 1 ;;

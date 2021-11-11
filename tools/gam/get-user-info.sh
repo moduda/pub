@@ -5,6 +5,9 @@
 # 15.jan.2016	ykim
 #
 
+PWD=$(dirname $0)
+. $PWD/gam-script-lib.sh
+
 case $1 in
 -v)	VERBOSE=yes; shift ;;
 *)	VERBOSE=no ;;
