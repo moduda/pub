@@ -1,0 +1,36 @@
+#! /bin/sh
+#
+# Wrapper for gam to use against multiple domains
+#
+# 21.jun.22	ykim
+#
+
+gam () {
+	"$HOME/bin/gam/gam" "$@"
+}
+
+while getopts ":d:" arg
+do
+	case $arg in
+	d)
+		DOMX=""
+		case $OPTARG in
+		fcc)	DOMX=-fcc ;;
+		first)	DOMX=-first ;;
+		*)		echo "Unrecognized domain: $OPTARG"; exit 1 ;;
+		esac
+		;;
+	*)
+		echo "Usage: $(basename $0) [ -d DOMAIN ] args ..."
+		exit
+		;;
+	esac
+done
+
+shift $((OPTIND-1))
+
+export OAUTHFILE=oauth2${DOMX}.txt
+export OAUTHSERVICEFILE=oauth2service${DOMX}.json
+export CLIENTSECRETS=client_secrets${DOMX}.json
+
+gam "$@"
