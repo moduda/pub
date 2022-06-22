@@ -21,7 +21,7 @@ do
 		esac
 		;;
 	*)
-		echo "Usage: $(basename $0) [ -d DOMAIN ] args ..."
+		echo "Usage: $(basename $0) [ -d DOMAIN ] gam args ..."
 		exit
 		;;
 	esac
@@ -33,4 +33,4 @@ export OAUTHFILE=oauth2${DOMX}.txt
 export OAUTHSERVICEFILE=oauth2service${DOMX}.json
 export CLIENTSECRETS=client_secrets${DOMX}.json
 
-gam "$@"
+"$@"
