@@ -18,8 +18,8 @@ do
 		DOMX=""
 		case $OPTARG in
 		ki*)	DOMX=-ki ;;
-		fcc)	DOMX=-fcc ;;
-		fip)	DOMX=-fip ;;
+		fc*)	DOMX=-fcc ;;
+		fi*)	DOMX=-fip ;;
 		*)	echo "Unrecognized domain: $OPTARG"; exit 1 ;;
 		esac
 		;;
