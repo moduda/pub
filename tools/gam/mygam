@@ -5,8 +5,10 @@
 # 21.jun.22	ykim
 #
 
+GAMBIN="$HOME/bin/gam"
+
 gam () {
-	"$HOME/bin/gam/gam" "$@"
+	"$GAMBIN/gam" "$@"
 }
 
 while getopts ":d:" arg
@@ -15,13 +17,14 @@ do
 	d)
 		DOMX=""
 		case $OPTARG in
+		ki*)	DOMX=-ki ;;
 		fcc)	DOMX=-fcc ;;
-		first)	DOMX=-first ;;
-		*)		echo "Unrecognized domain: $OPTARG"; exit 1 ;;
+		fip)	DOMX=-fip ;;
+		*)	echo "Unrecognized domain: $OPTARG"; exit 1 ;;
 		esac
 		;;
 	*)
-		echo "Usage: $(basename $0) [ -d DOMAIN ] gam args ..."
+		echo "Usage: $(basename $0) [ -d DOMAIN ] args ..."
 		exit
 		;;
 	esac
@@ -32,5 +35,19 @@ shift $((OPTIND-1))
 export OAUTHFILE=oauth2${DOMX}.txt
 export OAUTHSERVICEFILE=oauth2service${DOMX}.json
 export CLIENTSECRETS=client_secrets${DOMX}.json
+
+if [ ! -r $GAMBIN/$OAUTHFILE ]
+then
+	echo "OAUTHFILE not found: [$OAUTHFILE]"
+	exit 1
+elif [ ! -r $GAMBIN/$OAUTHSERVICEFILE ]
+then
+	echo "OAUTHSERVICEFILE not found: [$OAUTHSERVICEFILE]"
+	exit 1
+elif [ ! -r $GAMBIN/$CLIENTSECRETS ]
+then
+	echo "CLIENTSECRETS not found: [$CLIENTSECRETS]"
+	exit 1
+fi
 
 "$@"
