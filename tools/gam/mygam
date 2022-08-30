@@ -3,6 +3,7 @@
 # Wrapper for gam to use against multiple domains
 #
 # 21.jun.22	ykim
+# 30.aug.22	ykim - list out -h domain options
 #
 
 GAMBIN="$HOME/bin/gam"
@@ -18,13 +19,14 @@ do
 		DOMX=""
 		case $OPTARG in
 		ki*)	DOMX=-ki ;;
-		fc*)	DOMX=-fcc ;;
-		fi*)	DOMX=-fip ;;
+		fc*)	DOMX=-fc ;;
+		fi*)	DOMX=-fi ;;
 		*)	echo "Unrecognized domain: $OPTARG"; exit 1 ;;
 		esac
 		;;
 	*)
-		echo "Usage: $(basename $0) [ -d DOMAIN ] args ..."
+		DOMOPTIONS=$(sed -n '/case \$OPTARG/,/esac/p' < $0 | grep "DOMX=-" | sed -e "s/.*DOMX=-/ /" | awk '{print $1}')
+		echo "Usage: $(basename $0) [ -d {"$DOMOPTIONS"} ] args ..."
 		exit
 		;;
 	esac
