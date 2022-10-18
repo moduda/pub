@@ -6,7 +6,7 @@
 # 10.jan.2019	ykim
 #
 
-trap 'exit_program' 0 1 2 3
+trap 'echo "Exiting..."; exit_program' SIGINT
 
 CMD=caffeinate
 RED='\033[0;31m'
@@ -56,3 +56,5 @@ DURATION=$(($DURATION * 60))
 echo -e "Staying ${GREEN}awake for ${ARG} ${unit}${NC} until ${YELLOW}$(date -v+${DURATION}S +'%r %D')${NC} ..."
 
 $CMD -dt $DURATION
+
+exit_program
