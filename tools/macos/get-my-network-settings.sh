@@ -2,7 +2,8 @@
 #
 # Get basic network settings to debug issues
 #
-# 25.feb.19		ykim
+# 25.feb.19	ykim@dynamicsignal.com
+# 4.sep.22	ykim - Added hostnames
 #
 
 AD_NAME=influentials.local
@@ -33,6 +34,11 @@ MY_SUBNET=$(for n in $GATEWAY; do echo "$n" | sed -e "s/\([0-9]*\.[0-9]*\.[0-9]*
 /bin/echo -n "."
 #[ -n "$MY_SUBNET" ] && MY_MEDIA=$(ifconfig | grep -A2 "$MY_SUBNET" | tail -1 | sed -e "s/.*: //")
 [ -n "$MY_SUBNET" ] && MY_MEDIA=$(for n in $(ifconfig -l); do ifconfig $n | awk '/inet [0-9]/ { print arg }' arg=$n; done)
+MYHOSTNAMES=$(
+        echo "HostName: $(scutil --get HostName)"
+        echo "LocalHostName: $(scutil --get LocalHostName)"
+        echo "ComputerName: $(scutil --get ComputerName)"
+)
 /bin/echo ". done"
 
 case $CSV in
@@ -47,8 +53,9 @@ yes)
 		USER: $MYUSERNAME
 		FULLNAME: $MYFULLNAME
 		S/N: $SERIALNUM
+		$MYHOSTNAMES
 		SSID: $SSID
-		AD Name: $AD_NAME
+		AD Name: ${AD_NAME:-"Not Joined"}
 		AD Server IP: $AD_SERVER_IP
 		MY IP: $(echo $MY_IP | fmt -200)
 		MY Gateway: $(echo $GATEWAY | fmt -200)
