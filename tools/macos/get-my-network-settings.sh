@@ -54,6 +54,7 @@ yes)
 		FULLNAME: $MYFULLNAME
 		S/N: $SERIALNUM
 		$MYHOSTNAMES
+		$(sw_vers)
 		SSID: $SSID
 		AD Name: ${AD_NAME:-"Not Joined"}
 		AD Server IP: $AD_SERVER_IP
