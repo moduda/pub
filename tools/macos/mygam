@@ -1,0 +1,55 @@
+#! /bin/sh
+#
+# Wrapper for gam to use against multiple domains
+#
+# 21.jun.22	ykim
+# 30.aug.22	ykim - list out -h domain options
+#
+
+GAMBIN="$HOME/bin/gam"
+
+gam () {
+	"$GAMBIN/gam" "$@"
+}
+
+while getopts ":d:" arg
+do
+	case $arg in
+	d)
+		DOMX=""
+		case $OPTARG in
+		ki*)	DOMX=-ki ;;
+		fc*)	DOMX=-fc ;;
+		fi*)	DOMX=-fi ;;
+		*)	echo "Unrecognized domain: $OPTARG"; exit 1 ;;
+		esac
+		;;
+	*)
+		DOMOPTIONS=$(sed -n '/case \$OPTARG/,/esac/p' < $0 | grep "DOMX=-" | sed -e "s/.*DOMX=-/ /" | awk '{print $1}')
+		echo "Usage: $(basename $0) [ -d {"$DOMOPTIONS"} ] args ..."
+		exit
+		;;
+	esac
+done
+
+shift $((OPTIND-1))
+
+export OAUTHFILE=oauth2${DOMX}.txt
+export OAUTHSERVICEFILE=oauth2service${DOMX}.json
+export CLIENTSECRETS=client_secrets${DOMX}.json
+
+if [ ! -r $GAMBIN/$OAUTHFILE ]
+then
+	echo "OAUTHFILE not found: [$OAUTHFILE]"
+	exit 1
+elif [ ! -r $GAMBIN/$OAUTHSERVICEFILE ]
+then
+	echo "OAUTHSERVICEFILE not found: [$OAUTHSERVICEFILE]"
+	exit 1
+elif [ ! -r $GAMBIN/$CLIENTSECRETS ]
+then
+	echo "CLIENTSECRETS not found: [$CLIENTSECRETS]"
+	exit 1
+fi
+
+"$@"

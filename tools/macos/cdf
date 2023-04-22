@@ -1,0 +1,65 @@
+#! /bin/sh
+#
+# Open a folder named under my Downloads tree
+# -p = print out the folders found but do not actually open filemgr
+#
+# 17.sep.20	ykim
+# 21.jan.21	ykim - If not found, try again with case insensitivy = TRUE
+#
+
+open_folder()
+{
+	[ $PRINTONLY = no ] && echo "${OPEN_CMD}'ing folder: $1" && $OPEN_CMD "$1" && return
+	case $OPEN_CMD in
+	cd)
+		echo "pushd $1"
+		;;
+	*)
+		echo "Folder found: $1"
+		[ $OPEN_CMD = "open" ] && ls -l $1/ | more
+		;;
+	esac
+}
+
+PRINTONLY=no
+CASE_SENSITIVE=-name
+CASE_INSENSITIVE=-iname
+CASESENSIVITY=$CASE_SENSITIVE
+
+RUN_FIND()
+{
+	RESULT=$(find  ~/tmp ~/Downloads ~/DySi ~/Documents ~/Desktop -path ./Slack-migration -prune -false -o -type d $CASESENSIVITY "*${1}*" 2>/dev/null)
+}
+
+case $(basename $0) in
+open*)	OPEN_CMD=open ;;
+cd*)	OPEN_CMD=cd; PRINTONLY=yes ;;
+esac
+
+case $1 in
+-p)	shift; PRINTONLY=yes ;;
+-i)	shift; CASESENSIVITY=$CASE_INSENSITIVE ;;
+-h)	echo "Usage: $(basename $0) [ -h -i -p ] dirname"; exit ;;
+esac
+
+RUN_FIND "*${1}*"
+
+case $RESULT in
+"")
+	CASESENSIVITY=$CASE_INSENSITIVE
+	RUN_FIND "*${1}*"
+	case $RESULT in
+	"")	echo "Found no dir named: $1"; exit 1 ;;
+	esac
+esac
+
+case $(echo "$RESULT" | awk 'END {print NR}') in
+1)	open_folder "$RESULT" ;;
+*)	echo "$RESULT" | cat -n | head -25
+	read -p "Enter number: " itemnum
+	case $itemnum in
+	[0-9]*)	open_folder "$(echo "$RESULT" | awk -v inum=$itemnum 'NR == inum')" ;;
+	*)	echo "Need a number"; exit 2 ;;
+	esac
+	;;
+esac
