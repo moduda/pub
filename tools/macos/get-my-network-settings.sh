@@ -39,6 +39,7 @@ MYHOSTNAMES=$(
         echo "LocalHostName: $(scutil --get LocalHostName)"
         echo "ComputerName: $(scutil --get ComputerName)"
 )
+MYISPIP=$(curl -s ifconfig.me)
 /bin/echo ". done"
 
 case $CSV in
@@ -61,6 +62,7 @@ yes)
 		MY IP: $(echo $MY_IP | fmt -200)
 		MY Gateway: $(echo $GATEWAY | fmt -200)
 		MY Media: $(echo $MY_MEDIA | fmt -200)
+		MY ISP IP: $MYISPIP ($(host $MYISPIP | awk '{print $NF}'))
 	EOF
 	;;
 esac
