@@ -1,0 +1,38 @@
+#! /bin/sh
+#
+# Make a (hard) link of this script to have different effects
+# Example: This script name "audio-to-mac" will trigger the first case condition
+#	make another file by "ln audio-to-mac audio-to-tv" and running that script
+#	will trigger the second case condition.
+#
+# Installtion of the switchaudiosource binary:
+#	% brew install switchaudio-osx
+#
+# 19.oct.23	ykim
+#
+
+change_to()
+{
+	VALUE="$1"
+	if [ "$(switchaudiosource -c)" = "$VALUE" ]
+	then
+		echo "Already set to: $VALUE"
+	else
+		switchaudiosource -s "$VALUE"
+	fi
+}
+
+case $0 in
+*-mac)
+	change_to "MacBook Pro Speakers"
+	;;
+*-tv)
+	change_to "TOSHIBA-TV"
+	;;
+*-now)
+	switchaudiosource -c
+	;;
+*)
+	echo "Unknown mode: $0"; exit 1
+	;;
+esac
