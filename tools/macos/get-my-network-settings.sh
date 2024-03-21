@@ -33,7 +33,7 @@ MY_SUBNET=$(for n in $GATEWAY; do echo "$n" | sed -e "s/\([0-9]*\.[0-9]*\.[0-9]*
 [ -n "$MY_SUBNET" ] && MY_IP=$(for n in $MY_SUBNET; do ifconfig | grep "$n" | awk '{ print $2 }'; done | sort -u)
 /bin/echo -n "."
 #[ -n "$MY_SUBNET" ] && MY_MEDIA=$(ifconfig | grep -A2 "$MY_SUBNET" | tail -1 | sed -e "s/.*: //")
-[ -n "$MY_SUBNET" ] && MY_MEDIA=$(for n in $(ifconfig -l); do ifconfig $n | awk '/inet [0-9]/ { print arg }' arg=$n; done)
+[ -n "$MY_SUBNET" ] && MY_MEDIA=$(for n in $(ifconfig -l); do ifconfig $n | awk '/inet [0-9]/ { print arg"="$2 }' arg=$n; done)
 MYHOSTNAMES=$(
         echo "HostName: $(scutil --get HostName)"
         echo "LocalHostName: $(scutil --get LocalHostName)"
