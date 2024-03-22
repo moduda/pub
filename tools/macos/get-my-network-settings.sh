@@ -18,7 +18,6 @@ esac
 MYUSERNAME=$(id -un)
 MYFULLNAME=$(id -F)
 SERIALNUM=$(ioreg -l | grep "IOPlatformSerialNumber" | awk '{print $NF}' | sed -e "s/\"//g")
-SSID=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport --getinfo | sed -n 's/^ *SSID: //p')
 /bin/echo -n "."
 AD_NAME=$(dsconfigad -show | awk '/Active Directory Domain/{print $NF}')
 [ -n "$AD_NAME" ] && AD_SERVER_IP=$(ping -c 1 $AD_NAME | head -1 | awk '{print $2, $3}' | sed -e "s/://g")
@@ -40,6 +39,9 @@ MYHOSTNAMES=$(
         echo "ComputerName: $(scutil --get ComputerName)"
 )
 MYISPIP=$(curl -s ifconfig.me)
+# deprecated # SSID=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport --getinfo | sed -n 's/^ *SSID: //p')
+WIFI_PORT=$(networksetup -listallhardwareports | grep -A1 -i "wi-fi" | tail -1 | awk '{ print $NF }')
+[ -n "$WIFI_PORT" ] && SSID=$(networksetup -getairportnetwork $WIFI_PORT | awk '{ print $NF }')
 /bin/echo ". done"
 
 case $CSV in
@@ -56,6 +58,7 @@ yes)
 		S/N: $SERIALNUM
 		$MYHOSTNAMES
 		$(sw_vers)
+		WIFI PORT: $WIFI_PORT
 		SSID: $SSID
 		AD Name: ${AD_NAME:-"Not Joined"}
 		AD Server IP: $AD_SERVER_IP
