@@ -34,7 +34,7 @@ case $0 in
 	switchaudiosource -c
 	;;
 *)
-	DEVLIST="$(switchaudiosource -a | sort -u)"
+	DEVLIST="$(switchaudiosource -a | grep -v "Microphone" | sort -u)"
 	echo "Choose one:"
 	echo "$DEVLIST" | cat -n
 	read -p "? " itemnum
