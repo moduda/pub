@@ -9,6 +9,7 @@
 #	% brew install switchaudio-osx
 #
 # 19.oct.23	ykim
+# 9.set.24	ykim - If named as "audio-to" then present options to choose from
 #
 
 change_to()
@@ -33,6 +34,12 @@ case $0 in
 	switchaudiosource -c
 	;;
 *)
-	echo "Unknown mode: $0"; exit 1
+	DEVLIST="$(switchaudiosource -a | sort -u)"
+	echo "Choose one:"
+	echo "$DEVLIST" | cat -n
+	read -p "? " itemnum
+	TODEV="$(echo "$DEVLIST" | awk -v inum=$itemnum 'NR == inum')"
+	[ null"$TODEV" = null ] && echo "Bad choice; nothing change." && exit 1
+	change_to "$TODEV"
 	;;
 esac
