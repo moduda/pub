@@ -9,7 +9,8 @@
 #	% brew install switchaudio-osx
 #
 # 19.oct.23	ykim
-# 9.set.24	ykim - If named as "audio-to" then present options to choose from
+# 9.sep.24	ykim - If named as "audio-to" then present options to choose from
+# 25.sep.24	ykim - using switchaudiosource -a -t output
 #
 
 change_to()
@@ -34,7 +35,8 @@ case $0 in
 	switchaudiosource -c
 	;;
 *)
-	DEVLIST="$(switchaudiosource -a | grep -v "Microphone" | sort -u)"
+	# List all output devices
+	DEVLIST="$(switchaudiosource -a -t output | sort -u)"
 	echo "Choose one:"
 	echo "$DEVLIST" | cat -n
 	read -p "? " itemnum
