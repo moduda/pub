@@ -4,6 +4,7 @@
 #
 # 25.feb.19	ykim@dynamicsignal.com
 # 4.sep.22	ykim - Added hostnames
+# 11.oct.24	ykim - Added mac address and media
 #
 
 AD_NAME=influentials.local
@@ -22,17 +23,31 @@ SERIALNUM=$(ioreg -l | grep "IOPlatformSerialNumber" | awk '{print $NF}' | sed -
 AD_NAME=$(dsconfigad -show | awk '/Active Directory Domain/{print $NF}')
 [ -n "$AD_NAME" ] && AD_SERVER_IP=$(ping -c 1 $AD_NAME | head -1 | awk '{print $2, $3}' | sed -e "s/://g")
 /bin/echo -n "."
-#GATEWAY=$(traceroute 1.1.1.1 2>/dev/null | head -3 | awk '/ 1 / { print $2, $3 }')
-#[ -n "$GATEWAY" ] && GATEWAY=$(netstat -rn | grep default | awk '$2 ~ /^[0-9]/ { print $2 }')
 GATEWAY=$(netstat -rn | grep default | awk '$2 ~ /^[0-9]/ { print $2 }')
 /bin/echo -n "."
 MY_SUBNET=$(for n in $GATEWAY; do echo "$n" | sed -e "s/\([0-9]*\.[0-9]*\.[0-9]*\)\..*/\1/"; done)
 /bin/echo -n "."
-#[ -n "$MY_SUBNET" ] && MY_IP=$(ifconfig | grep "$MY_SUBNET" | awk '{ print $2 }')
 [ -n "$MY_SUBNET" ] && MY_IP=$(for n in $MY_SUBNET; do ifconfig | grep "$n" | awk '{ print $2 }'; done | sort -u)
 /bin/echo -n "."
-#[ -n "$MY_SUBNET" ] && MY_MEDIA=$(ifconfig | grep -A2 "$MY_SUBNET" | tail -1 | sed -e "s/.*: //")
-[ -n "$MY_SUBNET" ] && MY_MEDIA=$(for n in $(ifconfig -l); do ifconfig $n | awk '/inet [0-9]/ { print arg"="$2 }' arg=$n; done)
+[ -n "$MY_SUBNET" ] && MY_MEDIA=$(
+	for n in $(ifconfig -l | fmt -1 | sort)
+	do
+		ifconfig $n | awk '
+		BEGIN { ipaddr=""; macaddr=""; media="" }
+			/inet [0-9]/ { ipaddr=$2 }
+			/ether/ { macaddr=$2 }
+			/media/ { media=$2 }
+			{
+				if (ipaddr != "" && macaddr != "" && media != "") {
+				print arg"={"ipaddr, macaddr, media"}"
+				ipaddr=""
+				macaddr=""
+				media=""
+				}
+			}
+		' arg=$n
+	done
+)
 MYHOSTNAMES=$(
         echo "HostName: $(scutil --get HostName)"
         echo "LocalHostName: $(scutil --get LocalHostName)"
