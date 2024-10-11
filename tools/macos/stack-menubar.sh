@@ -1,3 +1,11 @@
+#!/bin/sh
+#
+# Adjust the padding/spacing between macOS menu icons.
+# This helps to show more icons before they hide behind the camera notch.
+#
+# 11.oct.24	ykim
+#
+
 # Note: These values are not set by default. This means you will get an error
 # that the keys and values do not exist if you have not previously set them.
 readMenuItemSpacing() {
