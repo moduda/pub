@@ -5,6 +5,7 @@
 # 25.feb.19	ykim@dynamicsignal.com
 # 4.sep.22	ykim - Added hostnames
 # 11.oct.24	ykim - Added mac address and media
+# 15.oct.24	ykim - Using newer method to get wifi info
 #
 
 AD_NAME=influentials.local
@@ -54,9 +55,13 @@ MYHOSTNAMES=$(
         echo "ComputerName: $(scutil --get ComputerName)"
 )
 MYISPIP=$(curl -s ifconfig.me)
-# deprecated # SSID=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport --getinfo | sed -n 's/^ *SSID: //p')
-WIFI_PORT=$(networksetup -listallhardwareports | grep -A1 -i "wi-fi" | tail -1 | awk '{ print $NF }')
-[ -n "$WIFI_PORT" ] && SSID=$(networksetup -getairportnetwork $WIFI_PORT | awk '{ print $NF }')
+#WIFI_PORT=$(networksetup -listallhardwareports | grep -A1 -i "wi-fi" | tail -1 | awk '{ print $NF }')
+#[ -n "$WIFI_PORT" ] && SSID=$(networksetup -getairportnetwork $WIFI_PORT | awk '{ print $NF }')
+RETVAL=$(system_profiler SPAirPortDataType)
+WIFI_PORT=$(echo "$RETVAL" | grep -A1 "Interfaces:" | sed -e "s/ *//" -e "s/://" | sed '1d')
+[ -n "$WIFI_PORT" ] && SSID=$(echo "$RETVAL" |
+	sed -n "/Current Network Information:/,/Other Local Wi-Fi Networks:/p" |
+	egrep -v "(Current|Other).*Network.*")
 /bin/echo ". done"
 
 case $CSV in
