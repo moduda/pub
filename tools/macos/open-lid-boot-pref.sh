@@ -13,7 +13,7 @@ disable-plugin|disable-plug-in)	# when charger while lid is open
 	;;
 reset)	# restore default settings
 	sudo nvram -d BootPreference
-	echo "% Reboot required to take changes take effect."
+	echo "% Reboot required for changes to take effect."
 	exit
 	;;
 *)
@@ -23,4 +23,4 @@ reset)	# restore default settings
 esac
 
 sudo nvram BootPreference="$PREFVAL"
-echo "% Reboot required to take changes take effect."
+echo "% Reboot required for changes to take effect."
