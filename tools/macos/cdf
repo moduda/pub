@@ -12,7 +12,7 @@ open_folder()
 	[ $PRINTONLY = no ] && echo "${OPEN_CMD}'ing folder: $1" && $OPEN_CMD "$1" && return
 	case $OPEN_CMD in
 	cd)
-		echo "pushd $1"
+		echo "pushd \"$1\""
 		;;
 	*)
 		echo "Folder found: $1"
