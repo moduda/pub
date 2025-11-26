@@ -7,6 +7,7 @@
 #
 
 GAMBIN="$HOME/bin/gam"
+GAMCFG="$HOME/.gam"
 
 gam () {
 	"$GAMBIN/gam" "$@"
@@ -38,15 +39,15 @@ export OAUTHFILE=oauth2${DOMX}.txt
 export OAUTHSERVICEFILE=oauth2service${DOMX}.json
 export CLIENTSECRETS=client_secrets${DOMX}.json
 
-if [ ! -r $GAMBIN/$OAUTHFILE ]
+if [ ! -r $GAMCFG/$OAUTHFILE ]
 then
 	echo "OAUTHFILE not found: [$OAUTHFILE]"
 	exit 1
-elif [ ! -r $GAMBIN/$OAUTHSERVICEFILE ]
+elif [ ! -r $GAMCFG/$OAUTHSERVICEFILE ]
 then
 	echo "OAUTHSERVICEFILE not found: [$OAUTHSERVICEFILE]"
 	exit 1
-elif [ ! -r $GAMBIN/$CLIENTSECRETS ]
+elif [ ! -r $GAMCFG/$CLIENTSECRETS ]
 then
 	echo "CLIENTSECRETS not found: [$CLIENTSECRETS]"
 	exit 1
