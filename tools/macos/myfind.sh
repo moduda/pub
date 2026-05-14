@@ -5,4 +5,11 @@
 # 8.may.25	ykim
 #
 
-find ~ -path ~/.Trash -prune -o -path ~/Library -prune -o -name "$1" -print
+case $1 in
+-f*)
+    FLAGS="$2"
+    shift 2
+    ;;
+esac
+
+find ~ -path ~/.Trash -prune -o -path ~/Library -prune -o $FLAGS -name "$1" -print
